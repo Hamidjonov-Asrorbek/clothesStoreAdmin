@@ -45,6 +45,8 @@ const Signin: React.FC = () => {
         style={{
           maxWidth: 600,
           width: "100%",
+          margin: "0 auto",
+          marginTop: "100px",
         }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
