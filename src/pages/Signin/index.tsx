@@ -42,12 +42,16 @@ const Signin: React.FC = () => {
         name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        style={{
+          maxWidth: 600,
+          width: "100%",
+        }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <h1 className="text-3xl font-bold text-center mb-5">Sign in</h1>
         <Form.Item<FieldType>
           label="Email"
           name="email"
