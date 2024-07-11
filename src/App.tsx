@@ -7,7 +7,7 @@ import {
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
-import Signin from "./pages/Signin";
+import Signin from "./pages/Signup";
 
 // Define types for the ProtectedRoute component props
 interface ProtectedRouteProps {

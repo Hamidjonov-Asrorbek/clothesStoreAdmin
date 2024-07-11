@@ -7,11 +7,14 @@ export default function Header() {
   console.log(location.pathname);
 
   return (
-    <header className="bg-[#001529] h-[60px] w-full text-white flex items-center px-8">
+    <header className=" bg-white text-slate-950 h-[60px] w-full flex items-center px-8">
       <ConfigProvider
-        theme={{
-          components: { Breadcrumb: { linkColor: "#fff", itemColor: "#fff" } },
-        }}>
+        theme={
+          {
+            // components: { Breadcrumb: { linkColor: "#000", itemColor: "#000" } },
+          }
+        }
+      >
         <Breadcrumb
           items={[
             {

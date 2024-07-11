@@ -19,5 +19,11 @@ export default function Products() {
     }
     getProducts();
   }, []);
-  return <div>Products</div>;
+  return (
+    <section>
+      <div className="">
+        <div className="border b-4 border-black"></div>
+      </div>
+    </section>
+  );
 }
