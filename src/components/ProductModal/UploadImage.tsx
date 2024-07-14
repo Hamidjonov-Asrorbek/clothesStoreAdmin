@@ -1,9 +1,12 @@
 import React, { Dispatch, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
-import type { GetProp, UploadFile, UploadProps } from "antd";
+import type { UploadFile, UploadProps } from "antd";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+type FileType = File & {
+  preview?: string;
+  originFileObj?: File;
+};
 
 const getBase64 = (file: FileType): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -20,14 +23,7 @@ const UploadImage = ({
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -39,38 +35,36 @@ const UploadImage = ({
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList.map((file) => ({ ...file, status: "done" })));
+    setFileList(newFileList);
     setFiles(newFileList.map((file) => file.originFileObj));
   };
 
   const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
+    <div>
       <PlusOutlined />
       <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
+    </div>
   );
+
   return (
     <>
       <Upload
-        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        beforeUpload={() => false} // Prevent auto upload
       >
         {fileList.length >= 8 ? null : uploadButton}
       </Upload>
-      {previewImage && (
-        <Image
-          wrapperStyle={{ display: "none" }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(""),
-          }}
-          src={previewImage}
-        />
-      )}
+      <Image
+        wrapperStyle={{ display: "none" }}
+        preview={{
+          visible: previewOpen,
+          onVisibleChange: (visible) => setPreviewOpen(visible),
+        }}
+        src={previewImage}
+      />
     </>
   );
 };
