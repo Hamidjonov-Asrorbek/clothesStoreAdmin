@@ -15,6 +15,7 @@ const ProductModal = ({
 }) => {
   const [files, setFiles] = useState<any[]>([]);
   const [urls, setUrls] = useState<string[]>([]);
+  console.log(urls);
 
   const onFinish = async (values: object) => {
     try {
