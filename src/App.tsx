@@ -4,6 +4,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { ConfigProvider, App as AntdApp } from "antd";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
@@ -17,7 +18,6 @@ interface ProtectedRouteProps {
 // Define ProtectedRoute component
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user") ?? "false");
-
   return user ? children : <Navigate to="/signin" />;
 };
 
@@ -51,7 +51,13 @@ const App: React.FC = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ConfigProvider>
+      <AntdApp>
+        <RouterProvider router={router} />
+      </AntdApp>
+    </ConfigProvider>
+  );
 };
 
 export default App;

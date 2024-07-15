@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
 import { Button, Form, Input, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -12,11 +12,12 @@ export default function Products() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [categories, setCategories] = useState<string[]>([]); // State to hold unique categories
+  const [categories, setCategories] = useState<string[]>([]);
+  const [editProduct, setEditProduct] = useState<any>(null);
 
   useEffect(() => {
-    async function getProducts() {
-      const querySnapshot = await getDocs(collection(db, "products"));
+    const q = query(collection(db, "products"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const res: any[] = [];
       querySnapshot.forEach((doc) => {
         res.push({ id: doc.id, ...doc.data() });
@@ -25,13 +26,13 @@ export default function Products() {
       setData(res);
       setFilteredData(res);
 
-      // Extract unique categories
       const uniqueCategories = Array.from(
         new Set(res.map((product) => product.category))
       );
       setCategories(uniqueCategories);
-    }
-    getProducts();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -91,7 +92,10 @@ export default function Products() {
           <Button
             size="large"
             type="primary"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setEditProduct(null);
+              setIsModalOpen(true);
+            }}
           >
             Create
           </Button>
@@ -99,11 +103,18 @@ export default function Products() {
         <ProductModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          editProduct={editProduct}
+          setData={setData} // Pass setData to ProductModal
         />
       </div>
 
       <div>
-        <ProductTable filterData={filteredData} />
+        <ProductTable
+          filterData={filteredData}
+          setEditProduct={setEditProduct}
+          setIsModalOpen={setIsModalOpen}
+          setData={setData} // Pass setData to ProductTable
+        />
       </div>
     </section>
   );
