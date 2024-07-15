@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Image, Button, Popconfirm, message } from "antd";
+import { Table, Image, Button, Popconfirm, message, Rate } from "antd";
 import type { TableColumnsType } from "antd";
 import { db } from "../../../firebase/config";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -23,6 +23,7 @@ interface DataType {
   images: string[];
   color: string;
   gender: string;
+  rating: number;
   id: string;
 }
 
@@ -86,7 +87,7 @@ const ProductTable: React.FC<any> = ({
       width: 70,
       render: (color: string) => (
         <div
-          className="w-10 h-10 rounded-full"
+          className="w-7 h-7 rounded-full"
           style={{ backgroundColor: color }}
         ></div>
       ),
@@ -96,6 +97,14 @@ const ProductTable: React.FC<any> = ({
       dataIndex: "gender",
       key: "gender",
       width: 50,
+    },
+    // rating
+    {
+      title: "Rating",
+      dataIndex: "rating",
+      key: "rating",
+      width: 200,
+      render: (rating) => <Rate disabled defaultValue={rating} />,
     },
     {
       title: "Images",

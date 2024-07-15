@@ -127,6 +127,14 @@ const ProductModal = ({
         >
           <Input type="color" />
         </Form.Item>
+        {/* rating */}
+        <Form.Item
+          name="rating"
+          label="Rating"
+          rules={[{ required: true, message: "Please input the rating!" }]}
+        >
+          <Input type="number" />
+        </Form.Item>
         <Form.Item
           name="gender"
           label="Gender"
